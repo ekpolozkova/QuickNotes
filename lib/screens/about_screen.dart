@@ -15,7 +15,7 @@ class AboutScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Пока без логики
+            Navigator.pop(context);
           },
         ),
       ),
@@ -138,7 +138,12 @@ class AboutScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Пока без логики
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Функция обновления цитаты будет в ЛР6'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.refresh),
                       label: const Text('Обновить цитату'),
@@ -189,7 +194,7 @@ class AboutScreen extends StatelessWidget {
             ),
           ),
         ],
-      );
+      ),
     );
   }
 }

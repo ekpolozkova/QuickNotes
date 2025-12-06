@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class NoteEditorScreen extends StatelessWidget {
+class NoteEditorScreen extends StatefulWidget {
   final String? initialTitle;
   final String? initialContent;
   
@@ -11,22 +11,65 @@ class NoteEditorScreen extends StatelessWidget {
   });
 
   @override
+  State<NoteEditorScreen> createState() => _NoteEditorScreenState();
+}
+
+class _NoteEditorScreenState extends State<NoteEditorScreen> {
+  late TextEditingController _titleController;
+  late TextEditingController _contentController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.initialTitle ?? '');
+    _contentController = TextEditingController(text: widget.initialContent ?? '');
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
+  void _saveNote() {
+    if (_titleController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Введите заголовок заметки'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    Navigator.pop(context, {
+      'title': _titleController.text,
+      'content': _contentController.text,
+    });
+  }
+
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          initialTitle == null ? 'Новая заметка' : 'Редактировать',
+          widget.initialTitle == null ? 'Новая заметка' : 'Редактировать',
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF1976D2),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {}, // Пока без логики
+          onPressed: _cancel,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.save, color: Colors.white),
-            onPressed: () {}, // Пока без логики
+            onPressed: _saveNote,
             tooltip: 'Сохранить',
           ),
         ],
@@ -38,6 +81,7 @@ class NoteEditorScreen extends StatelessWidget {
           children: [
             // Поле для заголовка
             TextField(
+              controller: _titleController,
               decoration: InputDecoration(
                 labelText: 'Заголовок',
                 labelStyle: const TextStyle(color: Color(0xFF1976D2)),
@@ -63,6 +107,7 @@ class NoteEditorScreen extends StatelessWidget {
             // Поле для содержимого
             Expanded(
               child: TextField(
+                controller: _contentController,
                 decoration: InputDecoration(
                   labelText: 'Содержимое',
                   labelStyle: const TextStyle(color: Color(0xFF1976D2)),
@@ -95,7 +140,7 @@ class NoteEditorScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {}, // Пока без логики
+                    onPressed: _saveNote,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF64B5F6),
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -116,7 +161,7 @@ class NoteEditorScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {}, // Пока без логики
+                    onPressed: _cancel,
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFF1976D2)),
                       padding: const EdgeInsets.symmetric(vertical: 16),
