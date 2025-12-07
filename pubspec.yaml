@@ -1,5 +1,5 @@
 name: quicknotes
-description: "A simple notes application"
+description: "Простое приложение для заметок с мотивационными цитатами"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -21,3 +21,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # Иконка приложения (добавь файл quicknotes_icon.png в папку assets/)
+  # assets:
+  #   - assets/quicknotes_icon.png
